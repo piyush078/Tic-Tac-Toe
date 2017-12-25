@@ -1,0 +1,23 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "A one-to-one tic tac toe",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piyush078/Tic-Tac-Toe.git"
+  },
+  "author": "Piyush Madhusudan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piyush078/Tic-Tac-Toe/issues"
+  },
+  "homepage": "https://github.com/piyush078/Tic-Tac-Toe#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}
