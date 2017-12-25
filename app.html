@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+  <title>Tic Tac Toe</title>
+
+  <!-- Internal Styling -->
+  <style type="text/css">
+    body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+    #content { position:absolute; left: 0; right: 0; bottom: 0; top: 0px; border-right: 2px solid gray; }
+    iframe { width: 49.5%; height:100%; border:1px solid gray; }
+  </style>
+  
+</head>
+<body>
+
+  <!-- 
+    Two frames for ease of the play.
+    Each frame has window for the tic tac toe.
+  -->
+  <div id="content">
+    <iframe src="http://localhost:8000/window"></iframe>
+    <iframe src="http://localhost:8000/window"></iframe>
+  </div>
+
+</body>
+</html>

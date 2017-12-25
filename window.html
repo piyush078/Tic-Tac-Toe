@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+
+  <!-- 
+  /**
+   * Bootstap and JQuery Sources
+   * and other Stylesheets and Scripts
+   -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+
+  <!-- Some Internal Styling -->
+  <style>
+    * { text-align: center; margin: 0; padding: 0; }
+    #area { margin:30px auto; padding:0 15%; }
+    table { margin:40px auto; }
+    td { width:100px; height:100px; }
+    td.top, td.center { border-bottom: 1px solid black; }
+    td.left { border-right: 1px solid black; }
+    td.right { border-left: 1px solid black; }
+    button { border-radius: 0 !important; }
+  </style>
+
+</head>
+<body>
+
+  <!-- Area of Tic Tac Toe -->
+  <div id="area">
+    <table class="table">
+      <tr>
+        <td class="top left"></td>
+        <td class="top"></td>
+        <td class="top right"></td>
+      </tr>
+      <tr>
+        <td class="center left"></td>
+        <td class="center"></td>
+        <td class="center right"></td>
+      </tr>
+      <tr>
+        <td class="bottom left"></td>
+        <td class="bottom"></td>
+        <td class="bottom right"></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Buttons -->
+
+  <!--
+    <div class="btn-group" role="group" aria-label="...">
+      <button type="button" class="btn btn-default">Play</button>
+      <button type="button" class="btn btn-default">Quit</button>
+      <button type="button" class="btn btn-default">Right</button>
+    </div>
+  -->
+  <div id="buttons">
+    <button type="button" class="btn btn-primary btn-sm">Play</button>
+  </div>
+
+  <!-- Result of the game -->
+  <div id="result"></div>
+
+  <!-- Socket Script -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    $ (document).ready (function () {
+      var circle = 'https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-circle-outline-20.png';
+      var cross  = 'https://cdn1.iconfinder.com/data/icons/epic-hand-drawns/64/cross-20.png';
+    });
+  </script>
+</body>
+</html>
