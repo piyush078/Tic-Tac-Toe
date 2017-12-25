@@ -12,7 +12,7 @@
 
   <!-- Some Internal Styling -->
   <style>
-    * { text-align: center; margin: 0; padding: 0; }
+    body, * { text-align: center; margin: 0; padding: 0; }
     #area { margin:30px auto; padding:0 15%; }
     table { margin:40px auto; }
     td { width:100px; height:100px; }
@@ -48,27 +48,17 @@
 
   <!-- Buttons -->
 
-  <!--
-    <div class="btn-group" role="group" aria-label="...">
-      <button type="button" class="btn btn-default">Play</button>
-      <button type="button" class="btn btn-default">Quit</button>
-      <button type="button" class="btn btn-default">Right</button>
-    </div>
-  -->
-  <div id="buttons">
-    <button type="button" class="btn btn-primary btn-sm">Play</button>
+  <div class="buttons">
+    <button type="button" id="create" class="btn btn-primary">Create</button>
+    <button type="button" id="join" class="btn btn-primary">Join</button>
+    <button type="button" id="quit" disabled class="btn btn-primary">Quit</button>
   </div>
-
+  
   <!-- Result of the game -->
   <div id="result"></div>
 
   <!-- Socket Script -->
   <script src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript">
-    $ (document).ready (function () {
-      var circle = 'https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-circle-outline-20.png';
-      var cross  = 'https://cdn1.iconfinder.com/data/icons/epic-hand-drawns/64/cross-20.png';
-    });
-  </script>
+  <script src="/index.js"></script>
 </body>
 </html>
