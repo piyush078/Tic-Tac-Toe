@@ -45,10 +45,13 @@ app.get ('/create', function (req, res) {
  */
 io.on ('connection', function (socket) {
   console.log ('Connected');
-  var room = rooms [rooms.length - 1];
-  socket.join (room);
-  io.to (room).emit ('create', 'Room Number' + room);
 
+  /* Push the new player into default room and emit the message */
+  var room = '0';
+  socket.join (room);
+  io.to (room).emit ('create', 'New Player Joined');
+
+  /* Action on move event */
   socket.on ('move', function (compo) {
     console.log (compo);
   });

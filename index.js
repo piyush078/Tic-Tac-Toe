@@ -1,8 +1,8 @@
 $ (document).ready (function () {
 
   /* Circle and Cross urls, Counters */
-	var circle  = 'https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-circle-outline-20.png';
-	var cross   = 'https://cdn1.iconfinder.com/data/icons/epic-hand-drawns/64/cross-20.png';
+  var circle  = 'https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-circle-outline-20.png';
+  var cross   = 'https://cdn1.iconfinder.com/data/icons/epic-hand-drawns/64/cross-20.png';
   var socket  = io ();
   var icon;
   var connect = false;
