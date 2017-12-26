@@ -11,20 +11,7 @@ $ (document).ready (function () {
 
   /* Action on click event of Create Button */
   $ ('#create').on ('click', function () {
-
-    /* Emit the create event */
-    socket.emit ('create');
-    socket.on ('create', function (newRoom) {
-      
-      /* Change the Buttons Accessibility */
-      $ ('#create').attr ('disabled', 'disabled');
-      $ ('#join').attr ('disabled', 'disabled');
-      $ ('#quit').removeAttr ('disabled');
-
-      connect = !connect;
-      icon = circle;
-      turn = true;
-    });
+    socket.emit ('create');  /* Emit the create event */
   });
 
   /* Action on clicking a Tic Tac Toe Box */
@@ -45,9 +32,26 @@ $ (document).ready (function () {
     }
   });
 
+  $ ('#join').on ('click', function () {
+    socket.emit ('join');  /* Emit the join event */
+  });
+
   /* Socket Events */
   socket.on ('join', function (message) {
     console.log (message);
+  });
+
+  /* Socket create event */
+  socket.on ('create', function (msg) {
+
+    /* Change the Buttons Accessibility */
+    $ ('#create').attr ('disabled', 'disabled');
+    $ ('#join').attr ('disabled', 'disabled');
+    $ ('#quit').removeAttr ('disabled');
+
+    connect = true;  /* Change the connect to true */
+    icon = circle;  /* Icon of the room creator is Circle */
+    turn = true;  /* First turn is of the room creator */
   });
 
 });
