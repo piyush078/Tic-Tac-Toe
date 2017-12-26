@@ -11,19 +11,19 @@ $ (document).ready (function () {
 
   /* Action on click event of Create Button */
   $ ('#create').on ('click', function () {
-    $.ajax ({
-      url: '/create', 
-      success: function (result) {
 
-        /* Change the Buttons Accessibility */
-        $ ('#create').attr ('disabled', 'disabled');
-        $ ('#join').attr ('disabled', 'disabled');
-        $ ('#quit').removeAttr ('disabled');
+    /* Emit the create event */
+    socket.emit ('create');
+    socket.on ('create', function (newRoom) {
+      
+      /* Change the Buttons Accessibility */
+      $ ('#create').attr ('disabled', 'disabled');
+      $ ('#join').attr ('disabled', 'disabled');
+      $ ('#quit').removeAttr ('disabled');
 
-        connect = !connect;
-        icon = circle;
-        turn = true;
-      }
+      connect = !connect;
+      icon = circle;
+      turn = true;
     });
   });
 
@@ -46,7 +46,7 @@ $ (document).ready (function () {
   });
 
   /* Socket Events */
-  socket.on ('create', function (message) {
+  socket.on ('join', function (message) {
     console.log (message);
   });
 
