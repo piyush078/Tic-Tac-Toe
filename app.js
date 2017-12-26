@@ -26,6 +26,24 @@ app.get ('/', function (req, res) {
 });
 
 /**
+ * Return the first available room.
+ *
+ * @params Io
+ * @return string
+ */
+function returnAvailableRoom (io) {
+  var available;
+  for (var key = 0; key < rooms.length; ++key) {
+    ele = rooms [key];
+    if (ele !== '0' && io.sockets.adapter.rooms [ele].length === 1) {  /* First room which is available */
+      available = ele;
+      break;
+    }
+  }
+  return available;
+}
+
+/**
  * Socket Connections and Events
  *
  * Callback function
@@ -37,7 +55,7 @@ io.on ('connection', function (socket) {
   var defaultRoom = '0';
   var currentRoom = '0';
   socket.join (defaultRoom);
-  io.to (defaultRoom).emit ('join', 'New Player Joined');
+  io.to (defaultRoom).emit ('init', 'New Player Joined');
 
   /* Action on move event */
   socket.on ('move', function (compo) {
@@ -57,13 +75,18 @@ io.on ('connection', function (socket) {
 
   /* Action on join room event */
   socket.on ('join', function () {
-    var available = [];
-    rooms.forEach (function (ele) {
-      if (ele !== '0') {
-        console.log ('Room No.' + ele + ' = ');
-        console.log (io.sockets.adapter.rooms [ele]);
-      }
-    });
+    var available = returnAvailableRoom (io);  /* First available room */
+
+    /* If there is a room available then join it */
+    if (available) {
+      socket.leave (currentRoom);  /* Leave the Default room */
+      socket.join (available, function () {
+        currentRoom = available;
+        io.to (currentRoom).emit ('join', available);
+      });
+    } else {
+      io.to (currentRoom).emit ('join');
+    }
   });
 
 });

@@ -9,11 +9,6 @@ $ (document).ready (function () {
   var turn;
   var compo   = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]];
 
-  /* Action on click event of Create Button */
-  $ ('#create').on ('click', function () {
-    socket.emit ('create');  /* Emit the create event */
-  });
-
   /* Action on clicking a Tic Tac Toe Box */
   $ ('td').on ('click', function () {
 
@@ -32,13 +27,19 @@ $ (document).ready (function () {
     }
   });
 
+  /* Action on clicking Create Button */
+  $ ('#create').on ('click', function () {
+    socket.emit ('create');  /* Emit the create event */
+  });
+
+  /* Action on clicking Join button */
   $ ('#join').on ('click', function () {
     socket.emit ('join');  /* Emit the join event */
   });
 
-  /* Socket Events */
-  socket.on ('join', function (message) {
-    console.log (message);
+  /* Socket init event */
+  socket.on ('init', function (msg) {
+    console.log (msg);
   });
 
   /* Socket create event */
@@ -52,6 +53,18 @@ $ (document).ready (function () {
     connect = true;  /* Change the connect to true */
     icon = circle;  /* Icon of the room creator is Circle */
     turn = true;  /* First turn is of the room creator */
+  });
+
+  /* Socket join event */
+  socket.on ('join', function (room) {
+    if (! room) {  /* If there is no available room */
+      console.log ('No Rooms Available.');
+    } else {
+      console.log ('Room joined. Lets play.');
+      connect = true;  /* Change the connect to true */
+      icon = cross;  /* Icon of the room joiner is Cross */
+      turn = false;  /* First turn is of the room creator */
+    }
   });
 
 });
