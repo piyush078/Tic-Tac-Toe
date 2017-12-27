@@ -35,7 +35,7 @@ function returnAvailableRoom (io) {
   var available;
   for (var key = 0; key < rooms.length; ++key) {
     ele = rooms [key];
-    if (ele !== '0' && io.sockets.adapter.rooms [ele].length === 1) {  /* First room which is available */
+    if (ele !== '0' && io.sockets.adapter.rooms && io.sockets.adapter.rooms [ele] && io.sockets.adapter.rooms [ele].length === 1) {  /* First room which is available */
       available = ele;
       break;
     }
@@ -87,6 +87,16 @@ io.on ('connection', function (socket) {
     } else {
       io.to (currentRoom).emit ('join');
     }
+  });
+
+  /* Action on quit room event */
+  socket.on ('quit', function () {
+    socket.leave (currentRoom);  /* Leave the current room */
+    io.to (currentRoom).emit ('victory', 'You win because the other dude left.');  /* Emit the victory message to other player because the opponent left */
+    socket.join (defaultRoom, function () {  /* Join the default room */
+      currentRoom = defaultRoom;
+      io.to (currentRoom).emit ('init', 'New Player Joined.');
+    });
   });
 
 });

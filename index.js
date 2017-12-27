@@ -37,6 +37,11 @@ $ (document).ready (function () {
     socket.emit ('join');  /* Emit the join event */
   });
 
+  /* Action on clicking Quit button */
+  $ ('#quit').on ('click', function () {
+    socket.emit ('quit');
+  });
+
   /* Socket init event */
   socket.on ('init', function (msg) {
     console.log (msg);
@@ -50,6 +55,8 @@ $ (document).ready (function () {
     $ ('#join').attr ('disabled', 'disabled');
     $ ('#quit').removeAttr ('disabled');
 
+    console.log (msg);
+
     connect = true;  /* Change the connect to true */
     icon = circle;  /* Icon of the room creator is Circle */
     turn = true;  /* First turn is of the room creator */
@@ -60,11 +67,27 @@ $ (document).ready (function () {
     if (! room) {  /* If there is no available room */
       console.log ('No Rooms Available.');
     } else {
-      console.log ('Room joined. Lets play.');
+      
+      /* Change the Buttons Accessibility */
+      $ ('#create').attr ('disabled', 'disabled');
+      $ ('#join').attr ('disabled', 'disabled');
+      $ ('#quit').removeAttr ('disabled');
+
+      console.log ('Room ' + room + ' joined. Lets play.');
       connect = true;  /* Change the connect to true */
       icon = cross;  /* Icon of the room joiner is Cross */
       turn = false;  /* First turn is of the room creator */
     }
+  });
+
+  /* Socket quit event */
+  socket.on ('quit', function () {
+    console.log ('Back to Default');
+  });
+
+  /* Socket victory event */
+  socket.on ('victory', function (msg) {
+    console.log (msg);
   });
 
 });
