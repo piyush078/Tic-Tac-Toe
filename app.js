@@ -60,6 +60,7 @@ io.on ('connection', function (socket) {
   /* Action on move event */
   socket.on ('move', function (compo) {
     console.log (compo);
+    io.to (currentRoom).emit ('move', compo);  /* Send the composition of the game */
   });
 
   /* Action on create room event */
@@ -82,20 +83,21 @@ io.on ('connection', function (socket) {
       socket.leave (currentRoom);  /* Leave the Default room */
       socket.join (available, function () {
         currentRoom = available;
-        io.to (currentRoom).emit ('join', available);
+        socket.emit ('join', available);  /* Emit the message to the room joiner */
+        io.to (currentRoom).emit ('play');  /* Confirmation to start the play */
       });
     } else {
-      io.to (currentRoom).emit ('join');
+      socket.emit ('join');
     }
   });
 
   /* Action on quit room event */
   socket.on ('quit', function () {
     socket.leave (currentRoom);  /* Leave the current room */
-    io.to (currentRoom).emit ('victory', 'You win because the other dude left.');  /* Emit the victory message to other player because the opponent left */
+    io.to (currentRoom).emit ('end', 'You win because the other dude left.');  /* Emit the victory message to other player because the opponent left */
     socket.join (defaultRoom, function () {  /* Join the default room */
       currentRoom = defaultRoom;
-      io.to (currentRoom).emit ('init', 'New Player Joined.');
+      socket.emit ('init', 'Back to the square one.');
     });
   });
 
