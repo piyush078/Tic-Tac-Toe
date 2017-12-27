@@ -5,7 +5,7 @@ var io   = require ('socket.io') (http);
 /**
  * An Object of rooms.
  *
- * @var Object
+ * @var Array
  */
 var rooms = ['0'];
 
@@ -44,6 +44,44 @@ function returnAvailableRoom (io) {
 }
 
 /**
+ * Check for the winner.
+ *
+ * @params array
+ * @return number
+ */
+function isWinner (compo) {
+
+  /* Find the winner */
+  if      (compo [0][0] === compo [0][1] && compo [0][1] === compo [0][2]) return compo [0][0];
+  else if (compo [1][0] === compo [1][1] && compo [1][1] === compo [1][2]) return compo [1][0];
+  else if (compo [2][0] === compo [2][1] && compo [2][1] === compo [2][2]) return compo [2][0];
+  else if (compo [0][0] === compo [1][0] && compo [1][0] === compo [2][0]) return compo [0][0];
+  else if (compo [0][1] === compo [1][1] && compo [1][1] === compo [2][1]) return compo [0][1];
+  else if (compo [0][2] === compo [1][2] && compo [1][2] === compo [2][2]) return compo [0][2];
+  else if (compo [0][0] === compo [1][1] && compo [1][1] === compo [2][2]) return compo [0][0];
+  else if (compo [0][2] === compo [1][1] && compo [1][1] === compo [2][0]) return compo [0][2];
+  else return -1;
+}
+
+/**
+ * Check if the game is complete.
+ *
+ * @params array
+ * @return boolean
+ */
+function isComplete (compo) {
+  var blankPresent = false;  /* Counter for presence of a blank box */
+  compo.forEach (function (row) {
+    row.forEach (function (ele) {
+      if (ele === -1) {  /* -1 value for a element indicates blank box */
+        blankPresent = true;
+      }
+    });
+  });
+  return !blankPresent;
+}
+
+/**
  * Socket Connections and Events
  *
  * Callback function
@@ -59,8 +97,16 @@ io.on ('connection', function (socket) {
 
   /* Action on move event */
   socket.on ('move', function (compo) {
-    console.log (compo);
     io.to (currentRoom).emit ('move', compo);  /* Send the composition of the game */
+
+    var winner = isWinner (compo);
+    /* If the game is complete or if there is a winner */
+    if (winner !== -1) {
+      console.log (winner);
+      io.to (currentRoom).emit ('victory', winner);  /* The game has a winner */
+    } else if (isComplete (compo)) {
+      io.to (currentRoom).emit ('end', 'The game is a draw.');  /* The game is a draw. */
+    }
   });
 
   /* Action on create room event */
@@ -97,7 +143,7 @@ io.on ('connection', function (socket) {
     io.to (currentRoom).emit ('end', 'You win because the other dude left.');  /* Emit the victory message to other player because the opponent left */
     socket.join (defaultRoom, function () {  /* Join the default room */
       currentRoom = defaultRoom;
-      socket.emit ('init', 'Back to the square one.');
+      socket.emit ('init', 'Back to the default room.');
     });
   });
 

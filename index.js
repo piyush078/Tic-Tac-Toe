@@ -28,9 +28,9 @@ $ (document).ready (function () {
   var cross   = 'https://cdn1.iconfinder.com/data/icons/epic-hand-drawns/64/cross-20.png';
   var socket  = io ();
   var connect = false;
-  var turn;
-  var status;
-  var compo   = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]];
+  var turn;  /* Turn counter */
+  var status;  /* Status counter for room creator or room joiner */
+  var compo   = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]];  /* Composition of the game */
 
   /* Action on clicking a Tic Tac Toe Box */
   $ ('td').on ('click', function () {
@@ -47,7 +47,7 @@ $ (document).ready (function () {
       }
 
     } else if (connect && ! turn) {
-      console.log ('Not your turn.');
+      $ ('#result').append ('Not your turn.');
     }
   });
 
@@ -59,6 +59,13 @@ $ (document).ready (function () {
     $ ('#create').removeAttr ('disabled');
     $ ('#join').removeAttr ('disabled');
     $ ('#quit').attr ('disabled', 'disabled');
+
+    /* Empty the game and result container */
+    var boxes = $ ('td');
+    for (var ind = 0; ind < boxes.length; ++ind) {
+      boxes.eq (ind).html ('');
+    }
+    $ ('#result').text ('');
   });
 
   /* Socket create event */
@@ -79,7 +86,7 @@ $ (document).ready (function () {
   /* Socket join event */
   socket.on ('join', function (room) {
     if (! room) {  /* If there is no available room */
-      console.log ('No Rooms Available.');
+      $ ('#result').text ('No Rooms Available.');
     } else {
 
       console.log ('Room ' + room + ' joined.');
@@ -108,6 +115,8 @@ $ (document).ready (function () {
   /* Socket move event */
   socket.on ('move', function (change) {
     var boxes = $ ('td');
+    
+    /* Fill the Tic Tac Toe boxes */
     change.forEach (function (row, rowNo) {
       row.forEach (function (ele, colNo) {
         if (ele === 1) {
@@ -117,9 +126,12 @@ $ (document).ready (function () {
         }
       });
     });
+
+    /* Change the turn and value of new composition */
     turn = !turn;
     compo = change;
 
+    /* Update the turn messages */
     if (turn) {
       $ ('#result').text ('Your turn dude.');
     } else {
@@ -129,7 +141,19 @@ $ (document).ready (function () {
 
   /* Socket victory event */
   socket.on ('end', function (msg) {
-    console.log (msg);
+    /* Show the feedback */
+    if (connect) {
+      $ ('#result').text (msg);
+    }
+    connect = false;
+  });
+
+  socket.on ('victory', function (winner) {
+    if (status === winner) {
+      $ ('#result').text ("You won.");
+    } else {
+      $ ('#result').text ("You lost.");
+    }
     connect = false;
   });
 
